@@ -16,9 +16,12 @@ component extends="BaseHandler"{
 	
 	/**
 	* Index
-	*/
+	*/	
 	any function index( event, rc, prc ){
 		prc.response.setData( "Welcome to my ColdBox RESTFul Service" );
 	}
 	
+	any function test( event, rc, prt ){
+		prc.response.setData( 'Test' );
+	}
 }

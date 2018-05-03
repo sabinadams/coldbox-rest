@@ -5,6 +5,9 @@
 * ********************************************************************************
 * HTTP Response model, spice up as needed and stored in the request scope
 */
+
+// This file is kept out of the interfaces folder because it is used by coldbox and is expected to be here
+
 component accessors="true"{
 
 	property name="format" 			type="string" 		default="json";

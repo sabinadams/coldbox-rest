@@ -77,6 +77,7 @@
 			info = [ "coldbox.system" ]
 		};
 
+
 		//Layout Settings
 		layoutSettings = {
 			defaultLayout = "",

@@ -4,6 +4,7 @@ component{
 		setFullRewrites( true );
 
 		route( ":handler/:action?" ).end();
+
 	}
 
 }
