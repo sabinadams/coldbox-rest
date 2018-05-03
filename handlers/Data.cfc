@@ -2,11 +2,11 @@
 * My RESTFul Event Handler
 */
 component extends="BaseHandler" {
-	/**
-	* Index
-    */
     property name="myService" inject="services.MyService";
     
+    /**
+    * Index
+    */
 	any function index( event, rc, prc ){
         prc.response.setData( "Data Endpoints" );
 	}
@@ -23,5 +23,11 @@ component extends="BaseHandler" {
                 'test2': 'test2',
                 'add1and2': myService.add(1,2)
             });
-	}
+    }
+    
+    any function save( event, rc, prt ) {
+        prc.response.setData({
+            test: "This was a post"
+        });
+    }
 }

@@ -32,7 +32,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 
 	function run(){
 
-		describe( "My RESTFUl Service", function(){
+		describe( "My RESTFUl Data Routes", function(){
 
 			beforeEach(function( currentSpec ){
 				// Setup as a new ColdBox request, VERY IMPORTANT. ELSE EVERYTHING LOOKS LIKE THE SAME REQUEST.
@@ -58,17 +58,17 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 				expect(	response.getStatusCode() ).toBe( 500 );
 			});
 
-			it( "can handle an echo", function(){
+			it( "can handle a data", function(){
 				prepareMock( getRequestContext() ).$( "getHTTPMethod", "GET" );
-				var event 		= execute( route="echo/index" );
+				var event 		= execute( route="data" );
 				var response 	= event.getPrivateValue( "response" );
 				expect(	response.getError() ).toBeFalse();
-				expect(	response.getData() ).toBe( "Welcome to my ColdBox RESTFul Service" );
+				expect(	response.getData() ).toBe( "Data Endpoints" );
 			});
 
 			it( "can handle missing actions", function(){
 				prepareMock( getRequestContext() ).$( "getHTTPMethod", "GET" );
-				var event 		= execute( route="echo/bogus" );
+				var event 		= execute( route="data/bogus" );
 				var response 	= event.getPrivateValue( "response" );
 				expect(	response.getError() ).tobeTrue();
 				expect(	response.getStatusCode() ).toBe( 405 );
