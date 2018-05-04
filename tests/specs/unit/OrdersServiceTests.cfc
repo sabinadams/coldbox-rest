@@ -21,7 +21,7 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 	function beforeAll(){
 		super.beforeAll();
         // do your own stuff here (after super call)
-        myService = createMock(className="models.services.MyService");
+        ordersService = createMock(className="models.services.OrdersService");
 	}
 
 	function afterAll(){
@@ -33,18 +33,18 @@ component extends="coldbox.system.testing.BaseTestCase" appMapping="/root"{
 
 	function run(){
 
-		describe( "My MyService Service", function(){
+		describe( "OrdersService", function(){
 
 			beforeEach(function( currentSpec ){
                 setup();
 			});
 
             it( "is a valid component", function() {
-                expect(myService).toBeComponent();
+                expect(ordersService).toBeComponent();
             });
 
 			it( "can add two numbers", function(){
-                expect(myService.add(1,2)).toBe(3);
+                expect(ordersService.add(1,2)).toBe(3);
             });
 			
 		});

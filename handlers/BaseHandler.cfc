@@ -60,7 +60,7 @@ component extends="coldbox.system.EventHandler"{
 		"update" 	: METHODS.PUT & "," & METHODS.PATCH,
 		"delete" 	: METHODS.DELETE
 	};
-	
+
 	/**
 	* Around handler for all actions it inherits
 	*/

@@ -1,0 +1,31 @@
+{
+    "datasources": {
+        "bullseye": {
+            "allowAlter": true,
+            "allowCreate": true,
+            "allowDelete": true,
+            "allowDrop": true,
+            "allowGrant": true,
+            "allowInsert": true,
+            "allowRevoke": true,
+            "allowSelect": true,
+            "allowUpdate": true,
+            "blob": "false",
+            "class": "org.gjt.mm.mysql.Driver",
+            "clob": "false",
+            "connectionLimit": "-1",
+            "connectionTimeout": "1",
+            "custom": "useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=true",
+            "database": "nld_testing",
+            "dbdriver": "MySQL",
+            "dsn": "jdbc:mysql://{host}:{port}/{database}",
+            "host": "10.0.1.170",
+            "metaCacheTimeout": "60000",
+            "password": "wwsdev",
+            "port": "3306",
+            "storage": "false",
+            "username": "root",
+            "validate": "false"
+        }
+    }
+}

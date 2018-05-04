@@ -4,10 +4,10 @@ component{
 		setFullRewrites( true );
 
 		// Custom setup
-		route( '/data/sample').withAction({
+		route( '/orders/sample').withAction({
 			GET: 'sample',
 			POST: 'save'	
-		}).toHandler('data');
+		}).toHandler('orders');
 
 		// Default setup
 		route('/:handler/:action?').end();
