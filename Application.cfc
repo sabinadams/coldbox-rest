@@ -24,7 +24,10 @@ component{
 		application.cbBootstrap = new coldbox.system.Bootstrap( COLDBOX_CONFIG_FILE, COLDBOX_APP_ROOT_PATH, COLDBOX_APP_KEY, COLDBOX_APP_MAPPING );
 		application.cbBootstrap.loadColdbox();
 		application.dao = new modules.dao.dao( dsn="bullseye" );
-		
+
+		var settingsCFC = new models.settings();
+		settingsCFC.setApplicationConstants();
+		settingsCFC.setApplicationConfiguration();
 		return true;
 	}
 
