@@ -34,23 +34,24 @@ component singleton {
         return account_reference;
     }
 
-    public function getPrimaryContact(
+    public struct function getPrimaryContact(
         required number companyID,
         string cachedWithin = '#createTimeSpan(0,1,0,0)#'
     ) {
         var ret = application.dao.read(
             sql = "
-                SELECT c.`ID`, companies.`company_types_ID`, c.`name`, c.`title`, c.`contact_types_ID`, c.`created_datetime`,
-                c.`created_by_users_ID`, c.`modified_datetime`, c.`modified_by_users_ID`,
-                c.`isDecisionMaker`, c.`best_times`, c.`comments`, c.`addresses_ID`
+                SELECT c.ID, companies.company_types_ID, c.name, c.title, c.contact_types_ID, c.created_datetime,
+                c.created_by_users_ID, c.modified_datetime, c.modified_by_users_ID,
+                c.isDecisionMaker, c.best_times, c.comments, c.addresses_ID
                 FROM contacts c
                 JOIN companies on companies.primary_contact = c.ID
                 WHERE companies.ID = :companyID{type='int'}
             ",
             params = {companyID: companyID},
             name = 'getPrimaryContact_' & companyID,
-            cachedWithin = cachedWithin
-        );
+            cachedWithin = cachedWithin,
+            returnType="array"
+        )[1];
 
         return ret;
     }
@@ -366,7 +367,7 @@ component singleton {
         return salesStatusCodeSQL;
     }
 
-    public array function getCompanyByID(number companyID = 0, any cachedWithin = createTimeSpan(0,0,0,0)) {
+    public struct function getCompanyByID(number companyID = 0, any cachedWithin = createTimeSpan(0,0,0,0)) {
         // Used to have a LIMIT 0 instead of the where clause if no companyID or invalid companyID        
         var ret = application.dao.read( 
             sql = "
@@ -402,7 +403,7 @@ component singleton {
             name = 'getCompanyByID_' & companyID != 0 ? companyID : 'structure',
             cachedWithin = cachedWithin,
             returnType = "array"
-        );
+        )[1];
         
         return ret;
     }

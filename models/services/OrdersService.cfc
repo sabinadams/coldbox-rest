@@ -6,17 +6,17 @@ component singleton {
     
     // Orders
     public number function addOrder( 
-        required number companyID,
+        required number COMPANIES_ID,
         required number USERS_ID,
         required CREATED_BY_USERS_ID,
         required date ORDER_DATETIME,
+        required date DELIVER_DATETIME,
         required number ORDER_STATUSES_ID,
         required number DELIVER_COMPANIES_ID,
         required string DELIVER_COMPANY,
         required string DELIVER_ADDRESS1,
         required string DELIVER_CITY,
         required string DELIVER_POSTAL_CODE,
-        required date DELIVER_DATETIME,
         required number INVOICE_COMPANIES_ID,
         required string INVOICE_COMPANY,
         required string INVOICE_ADDRESS1,
@@ -59,39 +59,57 @@ component singleton {
         string reference_customer_name = "",
         string purchase_order_number = ""
     ) {
-        var company = contactsService.getCompanyByID( arguments.companyID );
-        
-        if ( 
-            !( len( trim( company.account_reference ) ) )
-            && application.configuration.generate_account_reference 
-        ) {
-            var account_reference = contactsService.generateAccountReference();
-            application.dao.execute(
-                sql = "UPDATE companies SET account_reference = :accountRef WHERE ID = :companyID", 
-                params = {accountRef: account_reference, companyID: arguments.companyID}
-            );
-        }
-        
-        var primaryContact = contactsService.getPrimaryContact( companyID );
-        var addresses = application.dao.read(
-            sql = "SELECT email_address from addresses WHERE ID = :addressID",
-            params = {addressID: primaryContact.addresses_ID}
-        );
+        try {
+            // Holds final Order object
+            var order = {};
 
-        arguments.invoice_email_address = addresses.email_address;
-        arguments.companies_ID = arguments.companyID;
-        arguments.status = 1;
-        arguments.modified_by_users_ID = arguments.created_by_users_ID;
-        arguments.modified_datetime = arguments.created_datetime = now();
-        
-        arguments.sales_statuses_ID = company.sales_statuses_ID;
-        arguments.sales_status_code = contacts.getCompanySalesStatusCode( arguments.companyID );
-        
+            // Sticks current arguments into order object
+            structAppend( order, arguments );
+            
+            // Grabs the company associated with the order
+            var company = contactsService.getCompanyByID( companies_ID );
+            
+            // If there is an account reference and the application is set to generate account references
+            if ( 
+                !( len( trim( company.account_reference ) ) )
+                && application.configuration.generate_account_reference 
+            ) {
+                // Generate an account reference
+                var account_reference = contactsService.generateAccountReference();
+
+                // Update the company's account reference
+                application.dao.execute(
+                    sql = "UPDATE companies SET account_reference = :accountRef{type='varchar'} WHERE ID = :companyID{type='int'}", 
+                    params = {accountRef: account_reference, companyID: companies_ID}
+                );
+            }
+
+            // Grabs the company's primary contact
+            var primaryContact = contactsService.getPrimaryContact( companies_ID );
+            // Grabs the primary contact's email address
+            var addresses = application.dao.read(
+                sql = "SELECT email_address from addresses WHERE ID = :addressID",
+                params = {addressID: primaryContact.addresses_ID}
+            );
+            
+            // Sets last needed bits of data for the new order
+            order.invoice_email_address = addresses.email_address;
+            order.status = 1;
+            order.modified_by_users_ID = created_by_users_ID;
+            order.modified_datetime = created_datetime = now();
+            order.sales_statuses_ID = company.sales_statuses_ID;
+            order.sales_status_code = contactsService.getCompanySalesStatusCode( companies_ID );
+            
+        } catch( any e ) {
+            // Error Handline Needed ❌❌❌
+            writeDump(e);abort;
+        }
+
         var newID = application.dao.insert(
             table = "orders",
             data = order,
-            insertPrimaryKeys = arguments.keyExists( 'ID' ),
-            logEvent = securityService.logEvent,
+            insertPrimaryKeys = !!val(arguments.ID),
+            onFinish = securityService.logEvent,
             callbackArgs = { userID = request.userID, eventType = application.constants.ORDER_ADDED } // ❌ Need to make request.userID
         );
 
